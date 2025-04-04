@@ -1,3 +1,4 @@
+import 'package:firstproject/Views/slideshow.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -67,7 +68,12 @@ class _ManyVideoState extends State<ManyVideo> {
       appBar: AppBar(
         title: const Text('Video'),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.navigate_next))
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SideNav()));
+              },
+              icon: const Icon(Icons.navigate_next))
         ],
       ),
       body: _screens[_currentIndex], // Display selected screen
@@ -226,11 +232,13 @@ class ShownMovies extends StatelessWidget {
   final String movieurl;
   final String title;
   final String ratings;
+  final String videoindex;
   const ShownMovies({
     super.key,
     required this.movieurl,
     required this.title,
     required this.ratings,
+    required this.videoindex,
   });
 
   @override
@@ -265,7 +273,14 @@ class ShownMovies extends StatelessWidget {
             ),
           ),
         ),
-        Positioned(child: SizedBox())
+        Positioned(
+            child: SizedBox(
+          child: IconButton(
+              onPressed: () {
+                print(videoindex);
+              },
+              icon: Icon(Icons.close)),
+        ))
       ],
     );
   }
@@ -274,6 +289,8 @@ class ShownMovies extends StatelessWidget {
 class MovieCard extends StatelessWidget {
   final int index;
   final List cards;
+
+  // var videoindex;
   const MovieCard({
     super.key,
     required this.cards,
@@ -293,12 +310,16 @@ class MovieCard extends StatelessWidget {
           child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
-              ...cards[index]["movies"].map((con) => Padding(
+              ...cards[index]["movies"].map((con) =>
+                  // videoindex = cards[index]["movies"];
+                  Padding(
                     padding: const EdgeInsets.all(10),
                     child: ShownMovies(
-                        movieurl: con["movieurl"],
-                        title: con["title"],
-                        ratings: con["ratings"].toString()),
+                      movieurl: con["movieurl"],
+                      title: con["title"],
+                      ratings: con["ratings"].toString(),
+                      videoindex: con[index].toString(),
+                    ),
                   ))
             ],
           ),
